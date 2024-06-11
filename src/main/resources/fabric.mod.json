@@ -1,0 +1,42 @@
+{
+	"schemaVersion": 1,
+	"id": "paintingframes",
+	"version": "${version}",
+	"name": "Painting Frames",
+	"description": "Spruce up your art collection with painting frames!",
+	"authors": [
+		"CheckMC, Calverin"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/paintingframes/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"checkmc.paintingframes.PaintingFrames"
+		],
+		"fabric-datagen": [
+			"checkmc.paintingframes.PaintingFramesDataGenerator"
+		]
+	},
+	"mixins": [
+		"paintingframes.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.20.6",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	},
+	"custom": {
+		"cardinal-components": [
+			"paintingframes:frameType"
+		]
+	}
+}
