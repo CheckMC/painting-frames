@@ -2,9 +2,11 @@ package checkmc.paintingframes.mixin;
 
 import checkmc.paintingframes.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -30,14 +32,27 @@ public class PaintingInteractMixin {
 
 			// Finding the frame to add
 			Frame frame = FrameVariants.frameFromItem(itemUsed);
-			if (frame != null) {
+			// Make sure frame is not null and that it isn't the current one.
+			if (frame != null && !frame.equals(FrameVariants.getFrame(painting.getComponent(PaintingFramesComponents.FRAME_TYPE).getValue()))) {
 				// Frame to add
 				PaintingFrames.LOGGER.info(frame.toString());
 				// Decrementing item stack (frame is being applied)
 				if (!player.getAbilities().creativeMode) {
 					player.getMainHandStack().decrement(1);
 				}
-				Component frameComponent = painting.getComponent(PaintingFramesComponents.FRAME_TYPE);
+
+				FrameComponent frameComponent = (FrameComponent) painting.getComponent(PaintingFramesComponents.FRAME_TYPE);
+				// Dropping the current frame item before applying the new one
+				if (FrameVariants.getFrame(frameComponent.getValue()) != null) {
+					//ItemEntity itemEntity = new ItemEntity(player.getWorld(), painting.getX()+0.5, painting.getY()+0.5, painting.getZ()+0.5, FrameVariants.getFrame(frameComponent.getValue()).getDropItem());
+					//player.getWorld().spawnEntity(itemEntity);
+
+					painting.dropItem(FrameVariants.getFrame(frameComponent.getValue()).getDropItem().getItem());
+				}
+
+
+				// Set the new frame value
+				frameComponent.setValue(frame);
 			}
 
 		}

@@ -19,7 +19,7 @@ public class PaintingFramesComponents implements EntityComponentInitializer {
         ComponentFactory<PaintingEntity, FrameComponent> factory = new ComponentFactory<PaintingEntity, FrameComponent>() {
             @Override
             public @NotNull FrameComponent createComponent(PaintingEntity paintingEntity) {
-                return new FrameComponent();
+                return new FrameComponent(paintingEntity);
             }
         };
 

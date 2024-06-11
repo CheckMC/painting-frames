@@ -1,20 +1,24 @@
 package checkmc.paintingframes;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 // This basically stores a Frame by converting it back and forth between strings and frame
-public class FrameComponent implements StringComponent {
+public class FrameComponent implements StringComponent, AutoSyncedComponent {
     private Frame frame_type;
+    private Entity entity;
 
     public FrameComponent() {}
 
-    public FrameComponent(Frame frame) {
-        this.frame_type = frame;
+    public FrameComponent(Entity entity) {
+        this.entity = entity;
     }
 
     public void setValue(Frame frame) {
         this.frame_type = frame;
+        PaintingFramesComponents.FRAME_TYPE.sync(entity);
     }
 
     @Override
