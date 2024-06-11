@@ -36,4 +36,8 @@ public class Frame {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return dropItem.getItem().toString() + " Frame";
+    }
 }

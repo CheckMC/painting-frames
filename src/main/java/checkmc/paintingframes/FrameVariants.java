@@ -1,5 +1,6 @@
 package checkmc.paintingframes;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.ColorHelper;
@@ -33,5 +34,15 @@ public class FrameVariants {
         }
         return "Not found";
     }
+
+    public static Frame frameFromItem(Item item) {
+        for (Frame frame : frameDict.values()) {
+            if (frame.getDropItem().getItem().equals(item)) {
+                return frame;
+            }
+        }
+        return null;
+    }
+
 }
 

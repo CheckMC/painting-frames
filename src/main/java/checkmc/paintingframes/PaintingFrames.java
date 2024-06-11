@@ -13,8 +13,8 @@ public class PaintingFrames implements ModInitializer {
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger("paintingframes");
-	public static final ComponentKey<StringComponent> frameType =
-			ComponentRegistry.getOrCreate(new Identifier("paintingframes", "frameType"), StringComponent.class);
+	public static final ComponentKey<StringComponent> frame_type =
+			ComponentRegistry.getOrCreate(new Identifier("paintingframes", "frame_type"), StringComponent.class);
 
 	@Override
 	public void onInitialize() {

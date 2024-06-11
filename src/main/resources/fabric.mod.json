@@ -3,7 +3,7 @@
 	"id": "paintingframes",
 	"version": "${version}",
 	"name": "Painting Frames",
-	"description": "Spruce up your art collection with painting frames!",
+	"description": "Fancy up your art collection with painting frames!",
 	"authors": [
 		"CheckMC, Calverin"
 	],
@@ -20,6 +20,9 @@
 		],
 		"fabric-datagen": [
 			"checkmc.paintingframes.PaintingFramesDataGenerator"
+		],
+		"cardinal-components": [
+			"checkmc.paintingframes.PaintingFramesComponents"
 		]
 	},
 	"mixins": [
@@ -36,7 +39,7 @@
 	},
 	"custom": {
 		"cardinal-components": [
-			"paintingframes:frameType"
+			"paintingframes:frame_type"
 		]
 	}
 }
