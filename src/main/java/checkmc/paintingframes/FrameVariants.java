@@ -13,21 +13,30 @@ import java.util.Objects;
 public class FrameVariants {
 
     private static Map<String, Frame> frameDict = new HashMap<String, Frame>();
-    public static Frame goldFrame = new Frame(new ItemStack(Items.GOLD_INGOT), new Color(250,214,74));
-    public static Frame diamondFrame = new Frame(new ItemStack(Items.DIAMOND), new Color(41, 204, 255));
-    public static Frame ironFrame = new Frame(new ItemStack(Items.IRON_INGOT), new Color(188, 188, 188));
-    public static Frame copperFrame = new Frame(new ItemStack(Items.COPPER_INGOT), new Color(255, 154, 21));
-    public static Frame oakFrame = new Frame(new ItemStack(Items.OAK_PLANKS), new Color(145, 117, 77));
-    public static Frame birchFrame = new Frame(new ItemStack(Items.BIRCH_PLANKS), new Color(202, 192, 141));
 
     // each frame key is the same as the item id that it drops.
     public static void initDict() {
-        frameDict.put("gold_ingot", goldFrame);
-        frameDict.put("diamond", diamondFrame);
-        frameDict.put("iron_ingot", ironFrame);
-        frameDict.put("copper_ingot", copperFrame);
-        frameDict.put("oak_planks", oakFrame);
-        frameDict.put("birch_planks", birchFrame);
+        addNewFrame(new Color(252,252,252), Items.WHITE_DYE, "white_dye");
+        addNewFrame(new Color(157,157,177), Items.LIGHT_GRAY_DYE, "light_gray_dye");
+        addNewFrame(new Color(177,177,177), Items.GRAY_DYE, "gray_dye");
+        addNewFrame(new Color(39,38,60), Items.BLACK_DYE, "black_dye");
+        addNewFrame(new Color(186,118,71), Items.BROWN_DYE, "brown_dye");
+        addNewFrame(new Color(248, 75, 75), Items.RED_DYE, "red_dye");
+        addNewFrame(new Color(255, 118, 66), Items.ORANGE_DYE, "orange_dye");
+        addNewFrame(new Color(243, 196, 10), Items.YELLOW_DYE, "white_dye");
+        addNewFrame(new Color(175, 255, 55), Items.LIME_DYE, "lime_dye");
+        addNewFrame(new Color(6, 136, 0), Items.GREEN_DYE, "green_dye");
+        addNewFrame(new Color(38, 136, 155), Items.CYAN_DYE, "cyan_dye");
+        addNewFrame(new Color(128, 227, 250), Items.LIGHT_BLUE_DYE, "light_blue_dye");
+        addNewFrame(new Color(41, 91, 206), Items.BLUE_DYE, "blue_dye");
+        addNewFrame(new Color(162, 13, 208), Items.PURPLE_DYE, "purple_dye");
+        addNewFrame(new Color(217, 63, 234), Items.MAGENTA_DYE, "magenta_dye");
+        addNewFrame(new Color(246, 127, 224), Items.PINK_DYE, "pink_dye");
+    }
+
+    public static void addNewFrame(Color color, Item item, String key) {
+        Frame frame = new Frame(new ItemStack(item), color);
+        frameDict.put(key, frame);
     }
 
     public static Frame getFrame(String key) {

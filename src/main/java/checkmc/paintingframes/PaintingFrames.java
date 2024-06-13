@@ -16,6 +16,8 @@ public class PaintingFrames implements ModInitializer {
 	public static final ComponentKey<StringComponent> frame_type =
 			ComponentRegistry.getOrCreate(new Identifier("paintingframes", "frame_type"), StringComponent.class);
 
+	//public static final Identifier whiteTexture
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
