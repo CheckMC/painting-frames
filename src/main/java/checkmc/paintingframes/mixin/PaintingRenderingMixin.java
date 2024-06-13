@@ -37,12 +37,20 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
         super(ctx);
     }
 
-    @Inject(method = "renderPainting", at = @At("TAIL"))
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, PaintingEntity entity, int width, int height, Sprite paintingSprite, Sprite backSprite, CallbackInfo ci) {
-        //VertexConsumer vertexConsumer1 = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(paintingEntity)));
-        //PaintingVariant paintingVariant1 = (PaintingVariant)paintingEntity.getVariant().value();
-        //int width = paintingVariant1.getWidth();
-        //int height = paintingVariant1.getHeight();
+    @Inject(method = "render", at = @At("TAIL"))
+    public void render(PaintingEntity paintingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
+        VertexConsumer vertexConsumer1 = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(paintingEntity)));
+
+        renderFrame(paintingEntity, f, g, matrixStack, vertexConsumerProvider, i);
+
+    }
+
+    private void renderFrame(PaintingEntity entity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+        VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(Identifier.of("minecraft","white_concrete")));
+        PaintingVariant paintingVariant1 = (PaintingVariant)entity.getVariant().value();
+
+        int width = paintingVariant1.getWidth();
+        int height = paintingVariant1.getHeight();
 
         FrameComponent frameComponent = (FrameComponent) entity.getComponent(PaintingFramesComponents.FRAME_TYPE);
         if (Objects.equals(frameComponent.getValue(), "none")) {
@@ -52,12 +60,12 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         Color color = FrameVariants.getFrame(frameComponent.getValue()).getColor();
 
-        MatrixStack.Entry entry = matrices.peek();
+        MatrixStack.Entry entry = matrixStack.peek();
         int frameWidth = 1; // 1 pixel frame
 
-        float f = (float)(-width) / 2.0f;
-        float g = (float)(-height) / 2.0f;
-        float h = 0.5f;
+        float f1 = (float)(-width) / 2.0f;
+        float g1 = (float)(-height) / 2.0f;
+        float h1 = 0.5f;
 
         float xStart = f+1;
         float xEnd = f + width-1;
@@ -69,16 +77,16 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         switch (direction) {
             case NORTH:
-                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h, 0, 0, -1, light, frameWidth, color);
+                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h1, 0, 0, -1, light, frameWidth, color);
                 break;
             case SOUTH:
-                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h, 0, 0, 1, light, frameWidth, color);
+                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h1, 0, 0, 1, light, frameWidth, color);
                 break;
             case WEST:
-                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h, -1, 0, 0, light, frameWidth, color);
+                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h1, -1, 0, 0, light, frameWidth, color);
                 break;
             case EAST:
-                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h, 1, 0, 0, light, frameWidth, color);
+                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h1, 1, 0, 0, light, frameWidth, color);
                 break;
         }
     }
