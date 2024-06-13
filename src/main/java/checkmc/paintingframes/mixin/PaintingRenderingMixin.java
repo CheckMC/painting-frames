@@ -5,7 +5,11 @@ import checkmc.paintingframes.FrameVariants;
 import checkmc.paintingframes.PaintingFrames;
 import checkmc.paintingframes.PaintingFramesComponents;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.particle.BlockDustParticle;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.particle.ParticleTextureData;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -46,11 +50,13 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
     }
 
     private void renderFrame(PaintingEntity entity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
-        VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(Identifier.of("minecraft","white_concrete")));
-        PaintingVariant paintingVariant1 = (PaintingVariant)entity.getVariant().value();
+        Identifier TEXTURE = Identifier.of("minecraft","textures/misc/white.png");
+        VertexConsumer vertexConsumerCorrected = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
 
-        int width = paintingVariant1.getWidth();
-        int height = paintingVariant1.getHeight();
+        PaintingVariant paintingVariant = (PaintingVariant)entity.getVariant().value();
+
+        int width = paintingVariant.getWidth();
+        int height = paintingVariant.getHeight();
 
         FrameComponent frameComponent = (FrameComponent) entity.getComponent(PaintingFramesComponents.FRAME_TYPE);
         if (Objects.equals(frameComponent.getValue(), "none")) {
@@ -77,45 +83,49 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         switch (direction) {
             case NORTH:
-                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h1, 0, 0, -1, light, frameWidth, color);
+                renderBorder(entry, vertexConsumerCorrected, xStart, xEnd, yStart, yEnd, h1, 0, 0, -1, light, frameWidth, color);
                 break;
             case SOUTH:
-                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h1, 0, 0, 1, light, frameWidth, color);
+                renderBorder(entry, vertexConsumerCorrected, xStart, xEnd, yStart, yEnd, h1, 0, 0, 1, light, frameWidth, color);
                 break;
             case WEST:
-                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h1, -1, 0, 0, light, frameWidth, color);
+                renderBorder(entry, vertexConsumerCorrected, xStart, xEnd, yStart, yEnd, h1, -1, 0, 0, light, frameWidth, color);
                 break;
             case EAST:
-                renderBorder(entry, vertexConsumer, xStart, xEnd, yStart, yEnd, h1, 1, 0, 0, light, frameWidth, color);
+                renderBorder(entry, vertexConsumerCorrected, xStart, xEnd, yStart, yEnd, h1, 1, 0, 0, light, frameWidth, color);
                 break;
         }
     }
 
     private void renderBorder(MatrixStack.Entry entry, VertexConsumer vertexConsumer, float xStart, float xEnd, float yStart, float yEnd, float z, int normalX, int normalY, int normalZ, int light, int frameWidth, Color color) {
+        float minU = 0.0f;
+        float maxU = 1.0f;
+        float minV = 0.0f;
+        float maxV = 1.0f;
 
         // Top border
         vertex1(entry, vertexConsumer, xStart, yEnd, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yEnd, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yEnd - frameWidth, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart, yEnd - frameWidth, 0, 0, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xEnd, yEnd, 0, 1, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xEnd, yEnd - frameWidth, 1, 0, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xStart, yEnd - frameWidth, 1, 1, z, normalX, normalY, normalZ, light, color);
 
         // Bottom border
         vertex1(entry, vertexConsumer, xStart, yStart + frameWidth, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yStart + frameWidth, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yStart, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart, yStart, 0, 0, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xEnd, yStart + frameWidth, 1, 0, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xEnd, yStart, 0, 1, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xStart, yStart, 1, 1, z, normalX, normalY, normalZ, light, color);
 
         // Left border
         vertex1(entry, vertexConsumer, xStart - frameWidth, yStart, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart - frameWidth, yEnd, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart, yEnd, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart, yStart, 0, 0, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xStart - frameWidth, yEnd, 0, 1, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xStart, yEnd, 1, 0, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xStart, yStart, 1, 1, z, normalX, normalY, normalZ, light, color);
 
         // Right border
         vertex1(entry, vertexConsumer, xEnd, yStart, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yEnd, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd + frameWidth, yEnd, 0, 0, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd + frameWidth, yStart, 0, 0, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xEnd, yEnd, 0, 1, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xEnd + frameWidth, yEnd, 1, 0, z, normalX, normalY, normalZ, light, color);
+        vertex1(entry, vertexConsumer, xEnd + frameWidth, yStart, 1, 1, z, normalX, normalY, normalZ, light, color);
     }
 
     private void vertex1(MatrixStack.Entry matrix, VertexConsumer vertexConsumer1, float x, float y, float u, float v, float z, int normalX, int normalY, int normalZ, int light, Color color) {
@@ -125,7 +135,7 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         //PaintingFrames.LOGGER.info("vertex");
         //VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(paintingEntity)));
-        vertexConsumer1.vertex(matrix, x, y, z-1.02f).color(red, green, blue, 255).texture(0, 0).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(matrix, normalX, normalY, normalZ).next();
+        vertexConsumer1.vertex(matrix, x, y, z-1.02f).color(red, green, blue, 255).texture(u, v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(matrix, normalX, normalY, normalZ).next();
     }
 
 
