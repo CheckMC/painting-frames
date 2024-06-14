@@ -14,7 +14,7 @@ public class PaintingFrames implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger("paintingframes");
 	public static final ComponentKey<StringComponent> frame_type =
-			ComponentRegistry.getOrCreate(new Identifier("paintingframes", "frame_type"), StringComponent.class);
+			ComponentRegistry.getOrCreate(Identifier.of("paintingframes", "frame_type"), StringComponent.class);
 
 	//public static final Identifier whiteTexture
 

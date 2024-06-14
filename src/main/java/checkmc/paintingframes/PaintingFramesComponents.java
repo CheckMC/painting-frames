@@ -12,7 +12,7 @@ import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
 public class PaintingFramesComponents implements EntityComponentInitializer {
 
     public static final ComponentKey<StringComponent> FRAME_TYPE =
-            ComponentRegistry.getOrCreate(new Identifier("paintingframes", "frame_type"), StringComponent.class);
+            ComponentRegistry.getOrCreate(Identifier.of("paintingframes", "frame_type"), StringComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
