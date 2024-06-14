@@ -4,6 +4,7 @@ import checkmc.paintingframes.FrameComponent;
 import checkmc.paintingframes.FrameVariants;
 import checkmc.paintingframes.PaintingFrames;
 import checkmc.paintingframes.PaintingFramesComponents;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
@@ -21,6 +22,8 @@ import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.RotationAxis;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.*;
 import java.util.Objects;
-
+@Debug(export = true)
 @Mixin(PaintingEntityRenderer.class)
 
 public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEntity> {
@@ -41,17 +44,18 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
         super(ctx);
     }
 
-    @Inject(method = "render", at = @At("TAIL"))
+    @Inject(method = "render*", at = @At(value="INVOKE", target="Lnet/minecraft/client/util/math/MatrixStack;pop()V"))
     public void render(PaintingEntity paintingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        VertexConsumer vertexConsumer1 = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(paintingEntity)));
+        Identifier TEXTURE = Identifier.of("minecraft","textures/misc/white.png");
+        VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
 
-        renderFrame(paintingEntity, f, g, matrixStack, vertexConsumerProvider, i);
-
+        renderFrame(paintingEntity, f,g, matrixStack, vertexConsumerFrame, i);
     }
 
-    private void renderFrame(PaintingEntity entity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
-        Identifier TEXTURE = Identifier.of("minecraft","textures/misc/white.png");
-        VertexConsumer vertexConsumerCorrected = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
+    private void renderFrame(PaintingEntity entity, float f, float g, MatrixStack matrixStack, VertexConsumer consumer, int i) {
+        //Identifier TEXTURE = Identifier.of("minecraft","textures/misc/white.png");
+        //VertexConsumer vertexConsumerCorrected = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
+        MatrixStack.Entry entry = matrixStack.peek();
 
         PaintingVariant paintingVariant = (PaintingVariant)entity.getVariant().value();
 
@@ -66,7 +70,7 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         Color color = FrameVariants.getFrame(frameComponent.getValue()).getColor();
 
-        MatrixStack.Entry entry = matrixStack.peek();
+        //MatrixStack.Entry entry = matrixStack.peek();
         int frameWidth = 1; // 1 pixel frame
 
         float f1 = (float)(-width) / 2.0f;
@@ -83,26 +87,21 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         switch (direction) {
             case NORTH:
-                renderBorder(entry, vertexConsumerCorrected, xStart, xEnd, yStart, yEnd, h1, 0, 0, -1, light, frameWidth, color);
+                renderBorder(entry, consumer, xStart, xEnd, yStart, yEnd, h1, 0, 0, -1, light, frameWidth, color);
                 break;
             case SOUTH:
-                renderBorder(entry, vertexConsumerCorrected, xStart, xEnd, yStart, yEnd, h1, 0, 0, 1, light, frameWidth, color);
+                renderBorder(entry, consumer, xStart, xEnd, yStart, yEnd, h1, 0, 0, 1, light, frameWidth, color);
                 break;
             case WEST:
-                renderBorder(entry, vertexConsumerCorrected, xStart, xEnd, yStart, yEnd, h1, -1, 0, 0, light, frameWidth, color);
+                renderBorder(entry, consumer, xStart, xEnd, yStart, yEnd, h1, -1, 0, 0, light, frameWidth, color);
                 break;
             case EAST:
-                renderBorder(entry, vertexConsumerCorrected, xStart, xEnd, yStart, yEnd, h1, 1, 0, 0, light, frameWidth, color);
+                renderBorder(entry, consumer, xStart, xEnd, yStart, yEnd, h1, 1, 0, 0, light, frameWidth, color);
                 break;
         }
     }
 
     private void renderBorder(MatrixStack.Entry entry, VertexConsumer vertexConsumer, float xStart, float xEnd, float yStart, float yEnd, float z, int normalX, int normalY, int normalZ, int light, int frameWidth, Color color) {
-        float minU = 0.0f;
-        float maxU = 1.0f;
-        float minV = 0.0f;
-        float maxV = 1.0f;
-
         // Top border
         vertex1(entry, vertexConsumer, xStart, yEnd, 0, 0, z, normalX, normalY, normalZ, light, color);
         vertex1(entry, vertexConsumer, xEnd, yEnd, 0, 1, z, normalX, normalY, normalZ, light, color);
