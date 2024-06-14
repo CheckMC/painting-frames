@@ -126,7 +126,7 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         //PaintingFrames.LOGGER.info("vertex");
         //VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(paintingEntity)));
-        vertexConsumer1.vertex(matrix, x, y, z - 0.0615F).color(red, green, blue, 200).texture(u, v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(matrix, normalX, normalY, normalZ);
+        vertexConsumer1.vertex(matrix, x, y, z - 0.0675F).color(red, green, blue, 200).texture(u, v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(matrix, normalX, normalY, normalZ);
     }
 
 
