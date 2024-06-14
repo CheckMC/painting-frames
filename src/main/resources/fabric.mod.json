@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"id": "paintingframes",
 	"version": "${version}",
-	"name": "Painting Frames",
-	"description": "Fancy up your art collection with painting frames!",
+	"name": "Paintings+",
+	"description": "Fancy up your art collection!",
 	"authors": [
 		"CheckMC, Calverin"
 	],
@@ -30,7 +30,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",
-		"minecraft": "~1.20.6",
+		"minecraft": "~1.21",
 		"java": ">=21",
 		"fabric-api": "*"
 	},

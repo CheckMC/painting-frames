@@ -3,7 +3,6 @@
   "package": "checkmc.paintingframes.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "PaintingDropMixin",
     "PaintingInteractMixin"
   ],
   "injectors": {

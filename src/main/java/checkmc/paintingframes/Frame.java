@@ -31,7 +31,7 @@ public class Frame {
     @Override
     public boolean equals(Object other) {
         if (other instanceof Frame) {
-            return dropItem.equals(((Frame) other).getDropItem());
+            return color.equals(((Frame) other).getColor());
         }
         return false;
     }

@@ -16,14 +16,13 @@ public class FrameVariants {
 
     // each frame key is the same as the item id that it drops.
     public static void initDict() {
-        addNewFrame(new Color(252,252,252), Items.WHITE_DYE, "white_dye");
         addNewFrame(new Color(157,157,177), Items.LIGHT_GRAY_DYE, "light_gray_dye");
         addNewFrame(new Color(177,177,177), Items.GRAY_DYE, "gray_dye");
         addNewFrame(new Color(39,38,60), Items.BLACK_DYE, "black_dye");
         addNewFrame(new Color(186,118,71), Items.BROWN_DYE, "brown_dye");
         addNewFrame(new Color(248, 75, 75), Items.RED_DYE, "red_dye");
         addNewFrame(new Color(255, 118, 66), Items.ORANGE_DYE, "orange_dye");
-        addNewFrame(new Color(243, 196, 10), Items.YELLOW_DYE, "white_dye");
+        addNewFrame(new Color(243, 196, 10), Items.YELLOW_DYE, "yellow_dye");
         addNewFrame(new Color(175, 255, 55), Items.LIME_DYE, "lime_dye");
         addNewFrame(new Color(6, 136, 0), Items.GREEN_DYE, "green_dye");
         addNewFrame(new Color(38, 136, 155), Items.CYAN_DYE, "cyan_dye");
@@ -32,6 +31,7 @@ public class FrameVariants {
         addNewFrame(new Color(162, 13, 208), Items.PURPLE_DYE, "purple_dye");
         addNewFrame(new Color(217, 63, 234), Items.MAGENTA_DYE, "magenta_dye");
         addNewFrame(new Color(246, 127, 224), Items.PINK_DYE, "pink_dye");
+        addNewFrame(new Color(252,252,252), Items.WHITE_DYE, "white_dye");
     }
 
     public static void addNewFrame(Color color, Item item, String key) {

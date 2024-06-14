@@ -47,16 +47,18 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
     @Inject(method = "render*", at = @At(value="INVOKE", target="Lnet/minecraft/client/util/math/MatrixStack;pop()V"))
     public void render(PaintingEntity paintingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
+
         Identifier TEXTURE = Identifier.of("minecraft","textures/misc/white.png");
         //VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
-        VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(paintingEntity)));
+        VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(TEXTURE));
         
-        renderFrame(paintingEntity, f,g, matrixStack, vertexConsumerFrame, i);
+        renderFrame(paintingEntity, f, g, matrixStack, vertexConsumerFrame, i);
     }
 
     private void renderFrame(PaintingEntity entity, float f, float g, MatrixStack matrixStack, VertexConsumer consumer, int i) {
         //Identifier TEXTURE = Identifier.of("minecraft","textures/misc/white.png");
         //VertexConsumer vertexConsumerCorrected = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
+        //matrixStack.push();
         MatrixStack.Entry entry = matrixStack.peek();
 
         PaintingVariant paintingVariant = (PaintingVariant)entity.getVariant().value();
@@ -79,10 +81,10 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
         float g1 = (float)(-height) / 2.0f;
         float h1 = 0.5f;
 
-        float xStart = f+1;
-        float xEnd = f + width-1;
-        float yStart = g;
-        float yEnd = g + height;
+        float xStart = f1+1;
+        float xEnd = f1 + width-1;
+        float yStart = g1;
+        float yEnd = g1 + height;
 
         Direction direction = entity.getHorizontalFacing();
         int light = WorldRenderer.getLightmapCoordinates(entity.getWorld(), entity.getBlockPos());
@@ -100,7 +102,10 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
             case EAST:
                 renderBorder(entry, consumer, xStart, xEnd, yStart, yEnd, h1, 1, 0, 0, light, frameWidth, color);
                 break;
+            default:
+                break;
         }
+        //matrixStack.pop();
     }
 
     private void renderBorder(MatrixStack.Entry entry, VertexConsumer vertexConsumer, float xStart, float xEnd, float yStart, float yEnd, float z, int normalX, int normalY, int normalZ, int light, int frameWidth, Color color) {
@@ -136,7 +141,7 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         //PaintingFrames.LOGGER.info("vertex");
         //VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(paintingEntity)));
-        vertexConsumer1.vertex(matrix, x, y, z-1.02f).color(red, green, blue, 255).texture(u, v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(matrix, normalX, normalY, normalZ).next();
+        vertexConsumer1.vertex(matrix, x, y, z-1.01f).color(red, green, blue, 200).texture(u, v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(matrix, normalX, normalY, normalZ);
     }
 
 

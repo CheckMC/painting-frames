@@ -43,12 +43,12 @@ public class PaintingInteractMixin {
 
 				FrameComponent frameComponent = (FrameComponent) painting.getComponent(PaintingFramesComponents.FRAME_TYPE);
 				// Dropping the current frame item before applying the new one
-				if (FrameVariants.getFrame(frameComponent.getValue()) != null) {
+				//if (FrameVariants.getFrame(frameComponent.getValue()) != null) {
 					//ItemEntity itemEntity = new ItemEntity(player.getWorld(), painting.getX()+0.5, painting.getY()+0.5, painting.getZ()+0.5, FrameVariants.getFrame(frameComponent.getValue()).getDropItem());
 					//player.getWorld().spawnEntity(itemEntity);
 
-					painting.dropItem(FrameVariants.getFrame(frameComponent.getValue()).getDropItem().getItem());
-				}
+					//painting.dropItem(FrameVariants.getFrame(frameComponent.getValue()).getDropItem().getItem());
+				//}
 
 
 				// Set the new frame value
