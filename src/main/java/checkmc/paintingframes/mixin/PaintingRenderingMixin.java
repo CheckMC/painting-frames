@@ -5,6 +5,7 @@ import checkmc.paintingframes.FrameVariants;
 import checkmc.paintingframes.PaintingFrames;
 import checkmc.paintingframes.PaintingFramesComponents;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
@@ -47,8 +48,9 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
     @Inject(method = "render*", at = @At(value="INVOKE", target="Lnet/minecraft/client/util/math/MatrixStack;pop()V"))
     public void render(PaintingEntity paintingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         Identifier TEXTURE = Identifier.of("minecraft","textures/misc/white.png");
-        VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
-
+        //VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
+        VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(paintingEntity)));
+        
         renderFrame(paintingEntity, f,g, matrixStack, vertexConsumerFrame, i);
     }
 
