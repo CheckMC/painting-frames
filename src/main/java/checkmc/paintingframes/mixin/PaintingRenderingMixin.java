@@ -2,6 +2,7 @@ package checkmc.paintingframes.mixin;
 
 import checkmc.paintingframes.FrameComponent;
 import checkmc.paintingframes.FrameVariants;
+import checkmc.paintingframes.PaintingFrames;
 import checkmc.paintingframes.PaintingFramesComponents;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderer;
@@ -37,13 +38,13 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         Identifier TEXTURE = Identifier.of("minecraft","textures/misc/white.png");
         //VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
-        VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
-        
-        renderFrame(paintingEntity, f, g, matrixStack, vertexConsumerFrame, i);
+        VertexConsumer vertexConsumerFrame = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(TEXTURE));
+
+        paintingFramesRenderFrame(paintingEntity, f, g, matrixStack, vertexConsumerFrame, i);
     }
 
     @Unique
-    private void renderFrame(PaintingEntity entity, float f, float g, MatrixStack matrixStack, VertexConsumer consumer, int i) {
+    private void paintingFramesRenderFrame(PaintingEntity entity, float f, float g, MatrixStack matrixStack, VertexConsumer consumer, int i) {
         //Identifier TEXTURE = Identifier.of("minecraft","textures/misc/white.png");
         //VertexConsumer vertexConsumerCorrected = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(TEXTURE));
         //matrixStack.push();
@@ -53,6 +54,8 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
 
         int width = paintingVariant.width();
         int height = paintingVariant.height();
+
+        //PaintingFrames.LOGGER.info("width = "+width+" height = "+height);
 
         FrameComponent frameComponent = (FrameComponent) entity.getComponent(PaintingFramesComponents.FRAME_TYPE);
         if (Objects.equals(frameComponent.getValue(), "none")) {
@@ -65,27 +68,29 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
         //MatrixStack.Entry entry = matrixStack.peek();
         float frameWidth = 0.0625F; // 1 pixel frame
 
+        // width 1: f1 = -0.5, xStart = 0.5, xEnd = 0.5
+
         float f1 = (float)(-width) / 2.0F;
         float g1 = (float)(-height) / 2.0F;
         float z = 0.03125F;
-        float xStart = f1 + 1.0F;
-        float xEnd = f1 + (float)width - 1.0F;
+        float xStart = -f1;
+        float xEnd = f1;
         float yEnd = g1 + (float)height;
         Direction direction = entity.getHorizontalFacing();
         int light = WorldRenderer.getLightmapCoordinates(entity.getWorld(), entity.getBlockPos());
 
         switch (direction) {
             case NORTH:
-                renderBorder(entry, consumer, xStart, xEnd, g1, yEnd, z, 0, 0, -1, light, frameWidth, color);
+                paintingFramesRenderBorder(entry, consumer, xStart, xEnd, g1, yEnd, z, 0, 0, -1, light, frameWidth, color);
                 break;
             case SOUTH:
-                renderBorder(entry, consumer, xStart, xEnd, g1, yEnd, z, 0, 0, 1, light, frameWidth, color);
+                paintingFramesRenderBorder(entry, consumer, xStart, xEnd, g1, yEnd, z, 0, 0, 1, light, frameWidth, color);
                 break;
             case WEST:
-                renderBorder(entry, consumer, xStart, xEnd, g1, yEnd, z, -1, 0, 0, light, frameWidth, color);
+                paintingFramesRenderBorder(entry, consumer, xStart, xEnd, g1, yEnd, z, -1, 0, 0, light, frameWidth, color);
                 break;
             case EAST:
-                renderBorder(entry, consumer, xStart, xEnd, g1, yEnd, z, 1, 0, 0, light, frameWidth, color);
+                paintingFramesRenderBorder(entry, consumer, xStart, xEnd, g1, yEnd, z, 1, 0, 0, light, frameWidth, color);
                 break;
             default:
                 break;
@@ -93,40 +98,42 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
         //matrixStack.pop();
     }
 
-    private void renderBorder(MatrixStack.Entry entry, VertexConsumer vertexConsumer, float xStart, float xEnd, float yStart, float yEnd, float z, int normalX, int normalY, int normalZ, int light, float frameWidth, Color color) {
+    private void paintingFramesRenderBorder(MatrixStack.Entry entry, VertexConsumer vertexConsumer, float xStart, float xEnd, float yStart, float yEnd, float z, int normalX, int normalY, int normalZ, int light, float frameWidth, Color color) {
+        
+        //PaintingFrames.LOGGER.info("xStart = "+xStart+" xEnd = "+xEnd);
+
         // Top border
-        vertex1(entry, vertexConsumer, xStart, yEnd, 0.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart, yEnd - frameWidth, 0.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yEnd - frameWidth, 1.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yEnd, 1.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, (float) (xStart-0.0625), yEnd, 0.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, (float) (xStart-0.0625), yEnd - frameWidth, 0.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, (float) (xEnd+0.0625), yEnd - frameWidth, 1.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, (float) (xEnd+0.0625), yEnd, 1.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
 
         // Bottom border
-        vertex1(entry, vertexConsumer, xStart, yStart + frameWidth, 0.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart, yStart, 0.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yStart, 1.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yStart + frameWidth, 1.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, (float) (xStart-0.0625), yStart + frameWidth, 0.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, (float) (xStart-0.0625), yStart, 0.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, (float) (xEnd+0.0625), yStart, 1.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, (float) (xEnd+0.0625), yStart + frameWidth, 1.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
 
         //Left border
-        vertex1(entry, vertexConsumer, xStart - frameWidth, yStart, 0.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart - frameWidth, yEnd, 0.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart, yEnd, 1.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xStart, yStart, 1.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, xStart - frameWidth, yStart, 0.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, xStart - frameWidth, yEnd, 0.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, xStart, yEnd, 1.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, xStart, yStart, 1.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
         //Right border
-        vertex1(entry, vertexConsumer, xEnd, yStart, 0.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd, yEnd, 0.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd + frameWidth, yEnd, 1.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
-        vertex1(entry, vertexConsumer, xEnd + frameWidth, yStart, 1.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
-
+        paintingFramesVertex1(entry, vertexConsumer, xEnd, yStart, 0.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, xEnd, yEnd, 0.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, xEnd + frameWidth, yEnd, 1.0F, 0.0F, z, normalX, normalY, normalZ, light, color);
+        paintingFramesVertex1(entry, vertexConsumer, xEnd + frameWidth, yStart, 1.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
     }
 
-    private void vertex1(MatrixStack.Entry matrix, VertexConsumer vertexConsumer1, float x, float y, float u, float v, float z, int normalX, int normalY, int normalZ, int light, Color color) {
+    private void paintingFramesVertex1(MatrixStack.Entry matrix, VertexConsumer vertexConsumer1, float x, float y, float u, float v, float z, int normalX, int normalY, int normalZ, int light, Color color) {
         int red = color.getRed();
         int green = color.getGreen();
         int blue = color.getBlue();
 
         //PaintingFrames.LOGGER.info("vertex");
         //VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(paintingEntity)));
-        vertexConsumer1.vertex(matrix, x, y, z - 0.0675F).color(red, green, blue, 200).texture(u, v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(matrix, normalX, normalY, normalZ);
+        vertexConsumer1.vertex(matrix, x, y, z - 0.0655F).color(red, green, blue, 160).texture(u, v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(matrix, normalX, normalY, normalZ);
     }
 
 

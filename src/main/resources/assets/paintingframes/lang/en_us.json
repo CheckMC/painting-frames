@@ -1,4 +1,27 @@
 {
   "painting.paintingframes.eternal_ascent.author": "CheckMC",
-  "painting.paintingframes.eternal_ascent.title": "Eternal ascent"
+  "painting.paintingframes.eternal_ascent.title": "Eternal ascent",
+
+  "painting.paintingframes.being_watched.author": "CheckMC",
+  "painting.paintingframes.being_watched.title": "Being watched",
+
+  "painting.paintingframes.island.author": "CheckMC",
+  "painting.paintingframes.island.title": "island",
+
+  "painting.paintingframes.window_to_color.author": "CheckMC",
+  "painting.paintingframes.window_to_color.title": "Window to color",
+
+  "painting.paintingframes.icechips.author": "ChipChase",
+  "painting.paintingframes.icechips.title": "icechips",
+
+  "painting.paintingframes.decayed_hall.title": "Decayed hall",
+  "painting.paintingframes.decayed_hall.author": "Miffen Kop",
+
+  "painting.paintingframes.fallen_record.title": "Fallen record",
+  "painting.paintingframes.fallen_record.author": "Miffen Kop",
+
+  "painting.paintingframes.wasteful_cat.title": "Wasteful cat",
+  "painting.paintingframes.wasteful_cat.author": "Miffen Kop",
+
+  "block.paintingframes.painting_table": "Painting Table"
 }

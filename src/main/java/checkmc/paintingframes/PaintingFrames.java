@@ -2,6 +2,14 @@ package checkmc.paintingframes;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
@@ -16,6 +24,8 @@ public class PaintingFrames implements ModInitializer {
 	public static final ComponentKey<StringComponent> frame_type =
 			ComponentRegistry.getOrCreate(Identifier.of("paintingframes", "frame_type"), StringComponent.class);
 
+	public static final Block PAINTING_TABLE = new Block(AbstractBlock.Settings.copy(Blocks.LOOM));
+
 	//public static final Identifier whiteTexture
 
 	@Override
@@ -26,7 +36,9 @@ public class PaintingFrames implements ModInitializer {
 
 		FrameVariants.initDict();
 
+		Registry.register(Registries.BLOCK, Identifier.of("paintingframes", "painting_table"), PAINTING_TABLE);
+		Registry.register(Registries.ITEM, Identifier.of("paintingframes", "painting_table"), new BlockItem(PAINTING_TABLE, new Item.Settings()));
 
-		LOGGER.info("Hello Fabric world!");
+		//LOGGER.info("Hello Fabric world!");
 	}
 }
