@@ -1,18 +1,17 @@
-package checkmc.paintingframes;
+package checkmc.paintingframes.frames;
 
+import checkmc.paintingframes.PaintingFrames;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.math.ColorHelper;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class FrameVariants {
 
-    private static Map<String, Frame> frameDict = new HashMap<String, Frame>();
+    private static final Map<String, checkmc.paintingframes.frames.Frame> frameDict = new HashMap<String, checkmc.paintingframes.frames.Frame>();
 
     // each frame key is the same as the item id that it drops.
     public static void initDict() {
@@ -35,18 +34,16 @@ public class FrameVariants {
     }
 
     public static void addNewFrame(Color color, Item item, String key) {
-        Frame frame = new Frame(new ItemStack(item), color);
+        checkmc.paintingframes.frames.Frame frame = new checkmc.paintingframes.frames.Frame(new ItemStack(item), color);
         frameDict.put(key, frame);
     }
 
-    public static Frame getFrame(String key) {
-        if (!frameDict.containsKey(key)) {
-            PaintingFrames.LOGGER.info("Key "+key+" does not exist in frame dictionary.");
-        }
+    public static checkmc.paintingframes.frames.Frame getFrame(String key) {
+        //PaintingFrames.LOGGER.info("Key "+key+" does not exist in frame dictionary.");
         return frameDict.get(key);
     }
 
-    public static String getKey(Frame frame) {
+    public static String getKey(checkmc.paintingframes.frames.Frame frame) {
         for (String key : frameDict.keySet()) {
             if (frameDict.get(key).equals(frame)) {
                 return key;
@@ -56,7 +53,7 @@ public class FrameVariants {
     }
 
     public static Frame frameFromItem(Item item) {
-        for (Frame frame : frameDict.values()) {
+        for (checkmc.paintingframes.frames.Frame frame : frameDict.values()) {
             if (frame.getDropItem().getItem().equals(item)) {
                 return frame;
             }

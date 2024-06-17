@@ -1,8 +1,6 @@
-package checkmc.paintingframes;
+package checkmc.paintingframes.frames;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.ColorHelper;
 
 import java.awt.*;
 

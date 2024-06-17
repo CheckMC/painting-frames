@@ -1,9 +1,8 @@
 package checkmc.paintingframes.mixin;
 
-import checkmc.paintingframes.FrameComponent;
-import checkmc.paintingframes.FrameVariants;
-import checkmc.paintingframes.PaintingFrames;
-import checkmc.paintingframes.PaintingFramesComponents;
+import checkmc.paintingframes.components.FrameComponent;
+import checkmc.paintingframes.frames.FrameVariants;
+import checkmc.paintingframes.components.PaintingFramesComponents;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -13,7 +12,6 @@ import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -98,6 +96,7 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
         //matrixStack.pop();
     }
 
+    @Unique
     private void paintingFramesRenderBorder(MatrixStack.Entry entry, VertexConsumer vertexConsumer, float xStart, float xEnd, float yStart, float yEnd, float z, int normalX, int normalY, int normalZ, int light, float frameWidth, Color color) {
         
         //PaintingFrames.LOGGER.info("xStart = "+xStart+" xEnd = "+xEnd);
@@ -126,6 +125,7 @@ public abstract class PaintingRenderingMixin extends EntityRenderer<PaintingEnti
         paintingFramesVertex1(entry, vertexConsumer, xEnd + frameWidth, yStart, 1.0F, 1.0F, z, normalX, normalY, normalZ, light, color);
     }
 
+    @Unique
     private void paintingFramesVertex1(MatrixStack.Entry matrix, VertexConsumer vertexConsumer1, float x, float y, float u, float v, float z, int normalX, int normalY, int normalZ, int light, Color color) {
         int red = color.getRed();
         int green = color.getGreen();

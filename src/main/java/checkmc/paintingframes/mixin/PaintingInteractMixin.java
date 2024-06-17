@@ -1,16 +1,16 @@
 package checkmc.paintingframes.mixin;
 
 import checkmc.paintingframes.*;
+import checkmc.paintingframes.components.FrameComponent;
+import checkmc.paintingframes.components.PaintingFramesComponents;
+import checkmc.paintingframes.frames.Frame;
+import checkmc.paintingframes.frames.FrameVariants;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import org.ladysnake.cca.api.v3.component.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,14 +28,14 @@ public class PaintingInteractMixin {
 
 			// Item player used on the painting
 			Item itemUsed = player.getMainHandStack().getItem();
-			PaintingFrames.LOGGER.info("Painting interacted with. Item = " + itemUsed);
+			//PaintingFrames.LOGGER.info("Painting interacted with. Item = " + itemUsed);
 
 			// Finding the frame to add
 			Frame frame = FrameVariants.frameFromItem(itemUsed);
 			// Make sure frame is not null and that it isn't the current one.
 			if (frame != null && !frame.equals(FrameVariants.getFrame(painting.getComponent(PaintingFramesComponents.FRAME_TYPE).getValue()))) {
 				// Frame to add
-				PaintingFrames.LOGGER.info(frame.toString());
+				//PaintingFrames.LOGGER.info(frame.toString());
 				// Decrementing item stack (frame is being applied)
 				if (!player.getAbilities().creativeMode) {
 					player.getMainHandStack().decrement(1);
@@ -52,6 +52,7 @@ public class PaintingInteractMixin {
 
 
 				// Set the new frame value
+				PaintingFrames.LOGGER.info("Painting dyed with "+frame.toString());
 				frameComponent.setValue(frame);
 			}
 

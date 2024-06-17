@@ -1,5 +1,8 @@
-package checkmc.paintingframes;
+package checkmc.paintingframes.components;
 
+import checkmc.paintingframes.frames.Frame;
+import checkmc.paintingframes.frames.FrameVariants;
+import checkmc.paintingframes.componentInterfaces.StringComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;

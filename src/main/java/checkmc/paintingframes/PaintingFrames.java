@@ -1,8 +1,10 @@
 package checkmc.paintingframes;
 
+import checkmc.paintingframes.componentInterfaces.StringComponent;
+import checkmc.paintingframes.frames.FrameVariants;
+import checkmc.paintingframes.paintingUnlocks.PaintingUnlocks;
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -35,10 +37,11 @@ public class PaintingFrames implements ModInitializer {
 		// Proceed with mild caution.
 
 		FrameVariants.initDict();
+		PaintingUnlocks.initDict();
 
 		Registry.register(Registries.BLOCK, Identifier.of("paintingframes", "painting_table"), PAINTING_TABLE);
 		Registry.register(Registries.ITEM, Identifier.of("paintingframes", "painting_table"), new BlockItem(PAINTING_TABLE, new Item.Settings()));
 
-		//LOGGER.info("Hello Fabric world!");
+		LOGGER.info("PaintingFrames init finished.");
 	}
 }

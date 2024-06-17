@@ -22,7 +22,7 @@
 			"checkmc.paintingframes.PaintingFramesDataGenerator"
 		],
 		"cardinal-components": [
-			"checkmc.paintingframes.PaintingFramesComponents"
+          "checkmc.paintingframes.components.PaintingFramesComponents"
 		]
 	},
 	"mixins": [
@@ -39,7 +39,8 @@
 	},
 	"custom": {
 		"cardinal-components": [
-			"paintingframes:frame_type"
+			"paintingframes:frame_type",
+			"paintingframes:painting_variant_unlocks"
 		]
 	}
 }
