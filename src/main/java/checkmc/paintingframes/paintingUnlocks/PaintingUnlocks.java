@@ -2,7 +2,6 @@ package checkmc.paintingframes.paintingUnlocks;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.util.Identifier;
 
@@ -14,10 +13,13 @@ public class PaintingUnlocks {
 
     private static final Map<Class<? extends Entity>, Identifier> entityDict = new HashMap<>();
 
-    public static void initDict() {
+    public static void initMobDict() {
         entityDict.put(EnderDragonEntity.class, Identifier.of("paintingframes:vanquished"));
         entityDict.put(ZombieEntity.class, Identifier.of("paintingframes:warden"));
     }
+
+    // Structure dict?
+
 
     public static Identifier getIdentifier(Entity entity) {
         return entityDict.get(entity.getClass());
