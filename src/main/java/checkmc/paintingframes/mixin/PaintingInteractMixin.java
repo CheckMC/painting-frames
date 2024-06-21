@@ -17,6 +17,7 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.PaintingVariantTags;
+import net.minecraft.server.command.TitleCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -35,8 +36,6 @@ import java.util.List;
 
 @Mixin(Entity.class)
 public abstract class PaintingInteractMixin {
-
-	// override     public ActionResult interact(PlayerEntity player, Hand hand) in PaintingEntity
 
 	@Inject(method = "interact", at = @At("HEAD"), cancellable = true)
 	private void onInteractPainting(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
@@ -94,6 +93,8 @@ public abstract class PaintingInteractMixin {
 				cir.setReturnValue(ActionResult.SUCCESS);
 			}
 
+			// DYE LOGIC ------------------
+
 			Frame frame = FrameVariants.frameFromItem(itemUsed);
 			// Make sure frame is not null and that it isn't the current one.
 			if (frame != null && !frame.equals(FrameVariants.getFrame(painting.getComponent(PaintingFramesComponents.FRAME_TYPE).getValue()))) {
@@ -110,15 +111,6 @@ public abstract class PaintingInteractMixin {
 
 			}
         }
-
-
-        // DYEING LOGIC -------------------------------------------------------------------------
-        // Item player used on the painting
-        //PaintingFrames.LOGGER.info("Painting interacted with. Item = " + itemUsed);
-
-        // Finding the frame to add
-
-
     }
 
 }
