@@ -1,10 +1,8 @@
 package checkmc.paintingframes.mixin;
 
 import checkmc.paintingframes.PaintingFrames;
-import checkmc.paintingframes.PaintingTable;
 import checkmc.paintingframes.components.PaintingFramesComponents;
 import checkmc.paintingframes.paintingUnlocks.PaintingUnlocks;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;

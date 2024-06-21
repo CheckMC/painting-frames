@@ -6,7 +6,6 @@ import checkmc.paintingframes.paintingUnlocks.PaintingUnlocks;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -26,7 +25,6 @@ public class PaintingFrames implements ModInitializer {
 	public static final ComponentKey<StringComponent> frame_type =
 			ComponentRegistry.getOrCreate(Identifier.of("paintingframes", "frame_type"), StringComponent.class);
 
-	public static final PaintingTable PAINTING_TABLE = new PaintingTable(AbstractBlock.Settings.copy(Blocks.LOOM));
 
 	//public static final Identifier whiteTexture
 
@@ -39,9 +37,6 @@ public class PaintingFrames implements ModInitializer {
 		FrameVariants.initDict();
 		PaintingUnlocks.initMobDict();
 
-		Registry.register(Registries.BLOCK, Identifier.of("paintingframes", "painting_table"), PAINTING_TABLE);
-		Registry.register(Registries.ITEM, Identifier.of("paintingframes", "painting_table"), new BlockItem(PAINTING_TABLE, new Item.Settings()));
-
-		LOGGER.info("PaintingFrames init finished.");
+		LOGGER.info("PaintingFrames is ready!");
 	}
 }

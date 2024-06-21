@@ -4,6 +4,7 @@ import checkmc.paintingframes.componentInterfaces.ListComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.util.Identifier;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 import java.util.ArrayList;
@@ -19,8 +20,14 @@ public class PaintingUnlocksComponent implements ListComponent, AutoSyncedCompon
     }
 
     @Override
-    public ArrayList<String> getValue() {
-        return unlockedPaintingVariants;
+    public ArrayList<Identifier> getValue() {
+        // return an identifer list
+        ArrayList<Identifier> returnList = new ArrayList<>();
+        for (String str : unlockedPaintingVariants) {
+            returnList.add(Identifier.of(str));
+        }
+
+        return returnList;
     }
 
     @Override
