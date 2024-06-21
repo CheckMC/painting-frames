@@ -40,12 +40,13 @@ public abstract class PaintingInteractMixin {
 
 	@Inject(method = "interact", at = @At("HEAD"), cancellable = true)
 	private void onInteractPainting(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-        //Item itemUsed = null;
         if ((Object) this instanceof PaintingEntity painting) {
 			Item itemUsed = player.getMainHandStack().getItem();
 			PaintingVariant thisVariant = painting.getVariant().value();
 
-            // BRUSHING LOGIC -----------------------------------------------------------------------
+			PaintingFrames.LOGGER.info("Test Logger");
+
+			// BRUSHING LOGIC -----------------------------------------------------------------------
             if (itemUsed.equals(Items.BRUSH)) {
 
                 // Generate list of painting variants
@@ -65,60 +66,46 @@ public abstract class PaintingInteractMixin {
 					}
 				}
 
-				// Now add any unlocked paintings to the list
+				// add any unlocked paintings to the list
 				if (player instanceof ServerPlayerEntity) {
 					ArrayList<Identifier> playerUnlocks = player.getComponent(PaintingFramesComponents.PAINTING_UNLOCKS).getValue();
-					//PaintingFrames.LOGGER.info(playerUnlocks.get(1).toString());
-					// go through all the paintings and find any that match asset id
 					for (PaintingVariant entry : list) {
-						//PaintingFrames.LOGGER.info(entry.assetId().toString());
 						if (playerUnlocks.contains(entry.assetId())) {
-							filteredList.add(entry);
+							if (entry.width() == thisVariant.width()) {
+								if (entry.height() == thisVariant.height()) {
+									filteredList.add(entry);
+								}
+							}
 						}
 					}
-					//filteredList.add(player.getWorld().getRegistryManager().get(RegistryKeys.PAINTING_VARIANT).get(playerUnlocks.getFirst()));
-					//PaintingFrames.LOGGER.info(filteredList.toString());
 				}
 
-				// Switch the painting's variant
-				// get the index of the current variant
 				int indexOfCurrent = filteredList.indexOf(thisVariant);
 				if (indexOfCurrent == filteredList.size()-1) {
 					indexOfCurrent = 0;
 				}
+
 				PaintingVariant nextVariant = filteredList.get((indexOfCurrent+1));
 				painting.setVariant(RegistryEntry.of(nextVariant));
 
-				// play a sound
 				SoundEvent soundEvent = SoundEvents.ITEM_BRUSH_BRUSHING_GENERIC;
 				player.getWorld().playSound(player, painting.getBlockPos(), soundEvent, SoundCategory.BLOCKS);
-				
-				//itemUsed.asItem().getComponents().get()
-				PaintingFrames.LOGGER.info("Changed painting variant.");
+				PaintingFrames.LOGGER.info(filteredList.toString());
 				cir.setReturnValue(ActionResult.SUCCESS);
 			}
-
-            // Find next painting variant, based on current one
-
-            // Set painting to be that variant
-
-            // Return successful action
 
 			Frame frame = FrameVariants.frameFromItem(itemUsed);
 			// Make sure frame is not null and that it isn't the current one.
 			if (frame != null && !frame.equals(FrameVariants.getFrame(painting.getComponent(PaintingFramesComponents.FRAME_TYPE).getValue()))) {
-				// Frame to add
-				//PaintingFrames.LOGGER.info(frame.toString());
-				// Decrementing item stack (frame is being applied)
 				if (!player.getAbilities().creativeMode) {
 					player.getMainHandStack().decrement(1);
 				}
 
 				FrameComponent frameComponent = (FrameComponent) painting.getComponent(PaintingFramesComponents.FRAME_TYPE);
-
-				// Set the new frame value
 				PaintingFrames.LOGGER.info("Painting dyed with " + frame.toString());
 				frameComponent.setValue(frame);
+				SoundEvent soundEvent = SoundEvents.ITEM_DYE_USE;
+				player.getWorld().playSound(player, painting.getBlockPos(), soundEvent, SoundCategory.BLOCKS);
 				cir.setReturnValue(ActionResult.SUCCESS);
 
 			}
