@@ -3,6 +3,8 @@ package checkmc.paintingframes.mixin;
 import checkmc.paintingframes.PaintingFrames;
 import checkmc.paintingframes.components.PaintingFramesComponents;
 import checkmc.paintingframes.paintingUnlocks.PaintingUnlocks;
+import net.minecraft.client.toast.Toast;
+import net.minecraft.client.toast.ToastManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -27,6 +29,7 @@ public abstract class EntityDropLootMixin extends LivingEntity {
         if (causedByPlayer && paintingIdentifier != null) {
             damageSource.getAttacker().getComponent(PaintingFramesComponents.PAINTING_UNLOCKS).addValue(paintingIdentifier.toString());
             PaintingFrames.LOGGER.info("Added painting unlock " + paintingIdentifier.toString() +" to "+damageSource.getAttacker().getNameForScoreboard());
+
         }
 
     }
