@@ -6,6 +6,7 @@ import checkmc.paintingframes.components.PaintingFramesComponents;
 import checkmc.paintingframes.frames.Frame;
 import checkmc.paintingframes.frames.FrameVariants;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.texture.PaintingManager;
 import net.minecraft.component.Component;
 import net.minecraft.entity.Entity;
@@ -14,6 +15,8 @@ import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.PaintingVariantTags;
@@ -22,11 +25,15 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -81,13 +88,34 @@ public abstract class PaintingInteractMixin {
 
 				int indexOfCurrent = filteredList.indexOf(thisVariant);
 				if (indexOfCurrent == filteredList.size()-1) {
-					indexOfCurrent = 0;
+					indexOfCurrent = -1;
 				}
 
 				PaintingVariant nextVariant = filteredList.get((indexOfCurrent+1));
 				painting.setVariant(RegistryEntry.of(nextVariant));
+				PaintingFrames.LOGGER.info(filteredList.toString());
 
-				SoundEvent soundEvent = SoundEvents.ITEM_BRUSH_BRUSHING_GENERIC;
+				// particle
+				ParticleEffect effect = ParticleTypes.CLOUD;
+				Direction facingDirection = painting.getHorizontalFacing();
+
+				// Get the position of the painting
+				Vec3d paintingPos = painting.getPos();
+
+				// Calculate the position in front of the painting
+				Vec3d frontPos = calculateFrontPosition(paintingPos, facingDirection);
+				//player.getWorld().addParticle(effect, frontPos.x+0.5, frontPos.y, frontPos.z+0.5, 0.01, 0.01, 0.01);
+				player.getWorld().addParticle(effect, frontPos.x, frontPos.y, frontPos.z, 0.01, 0.01, 0.01);
+				//player.getWorld().addParticle(effect, frontPos.x-0.5, frontPos.y, frontPos.z-0.5, 0.01, 0.01, 0.01);
+
+				String keyTitle = "painting."+nextVariant.assetId().getNamespace()+"."+nextVariant.assetId().getPath()+".title";
+				String keyAuthor = "painting."+nextVariant.assetId().getNamespace()+"."+nextVariant.assetId().getPath()+".author";
+
+				Text finalMessage = Text.translatable(keyTitle).append(Text.literal(" by ").append(Text.translatable(keyAuthor)));
+
+				player.sendMessage(finalMessage, true);
+
+				SoundEvent soundEvent = SoundEvents.ITEM_BOOK_PAGE_TURN;
 				player.getWorld().playSound(player, painting.getBlockPos(), soundEvent, SoundCategory.BLOCKS);
 				PaintingFrames.LOGGER.info(filteredList.toString());
 				cir.setReturnValue(ActionResult.SUCCESS);
@@ -112,5 +140,22 @@ public abstract class PaintingInteractMixin {
 			}
         }
     }
+
+	@Unique
+	private static Vec3d calculateFrontPosition(Vec3d paintingPos, Direction facingDirection) {
+		double offset = 0.2; // Adjust this value to control how far in front of the painting the particles should appear
+		switch (facingDirection) {
+			case NORTH:
+				return paintingPos.add(0, 0, -offset);
+			case SOUTH:
+				return paintingPos.add(0, 0, offset);
+			case WEST:
+				return paintingPos.add(-offset, 0, 0);
+			case EAST:
+				return paintingPos.add(offset, 0, 0);
+			default:
+				return paintingPos;
+		}
+	}
 
 }

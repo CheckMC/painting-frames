@@ -23,6 +23,9 @@ public class PaintingUnlocksComponent implements ListComponent, AutoSyncedCompon
     public ArrayList<Identifier> getValue() {
         // return an identifer list
         ArrayList<Identifier> returnList = new ArrayList<>();
+        if (unlockedPaintingVariants == null) {
+            return new ArrayList<Identifier>();
+        }
         for (String str : unlockedPaintingVariants) {
             returnList.add(Identifier.of(str));
         }
