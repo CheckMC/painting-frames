@@ -1,19 +1,19 @@
 {
   "replace": false,
   "values": [
-    "paintingframes:eternal_ascent",
-    "paintingframes:being_watched",
-    "paintingframes:island",
-    "paintingframes:window_to_color",
-    "paintingframes:icechips",
-    "paintingframes:decayed_hall",
-    "paintingframes:fallen_record",
-    "paintingframes:wasteful_cat",
-    "paintingframes:office",
-    "paintingframes:woodchips",
-    "paintingframes:grand_hall",
-    "paintingframes:new_home",
-    "paintingframes:flaming_sky",
-    "paintingframes:mortuary"
+    "refinedpaintings:eternal_ascent",
+    "refinedpaintings:being_watched",
+    "refinedpaintings:island",
+    "refinedpaintings:window_to_color",
+    "refinedpaintings:icechips",
+    "refinedpaintings:decayed_hall",
+    "refinedpaintings:fallen_record",
+    "refinedpaintings:wasteful_cat",
+    "refinedpaintings:office",
+    "refinedpaintings:woodchips",
+    "refinedpaintings:grand_hall",
+    "refinedpaintings:new_home",
+    "refinedpaintings:flaming_sky",
+    "refinedpaintings:mortuary"
   ]
 }
