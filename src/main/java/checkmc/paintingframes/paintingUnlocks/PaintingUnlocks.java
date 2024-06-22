@@ -3,6 +3,7 @@ package checkmc.paintingframes.paintingUnlocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -19,6 +20,14 @@ public class PaintingUnlocks {
     }
 
     // Structure dict?
+
+    public static String identiferToText(Identifier id) {
+        String toReturn = null;
+        if (id.equals(Identifier.of("paintingframes:warden"))) {
+            return "Warden";
+        }
+        return null;
+    }
 
 
     public static Identifier getIdentifier(Entity entity) {
