@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "checkmc.refinedpaintings.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "PaintingInteractMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "PaintingRenderingMixin"
+  ]
+}

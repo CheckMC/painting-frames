@@ -1,32 +1,32 @@
 {
 	"schemaVersion": 1,
-	"id": "paintingframes",
+	"id": "refinedpaintings",
 	"version": "${version}",
-	"name": "Paintings+",
-	"description": "Fancy up your art collection!",
+	"name": "Refined Paintings",
+	"description": "Some additions to paintings.",
 	"authors": [
 		"CheckMC, Calverin"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/project/refined-paintings/",
+		"sources": "https://github.com/CheckMC/painting-frames"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/paintingframes/icon.png",
+	"icon": "assets/refinedpaintings/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"checkmc.paintingframes.PaintingFrames"
+			"checkmc.refinedpaintings.PaintingFrames"
 		],
 		"fabric-datagen": [
-			"checkmc.paintingframes.PaintingFramesDataGenerator"
+			"checkmc.refinedpaintings.PaintingFramesDataGenerator"
 		],
 		"cardinal-components": [
-          "checkmc.paintingframes.components.PaintingFramesComponents"
+          "checkmc.refinedpaintings.components.PaintingFramesComponents"
 		]
 	},
 	"mixins": [
-		"paintingframes.mixins.json"
+		"refinedpaintings.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",
@@ -39,8 +39,8 @@
 	},
 	"custom": {
 		"cardinal-components": [
-			"paintingframes:frame_type",
-			"paintingframes:painting_variant_unlocks"
+			"refinedpaintings:frame_type",
+			"refinedpaintings:painting_variant_unlocks"
 		]
 	}
 }
